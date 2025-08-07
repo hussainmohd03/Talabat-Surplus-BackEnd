@@ -10,7 +10,8 @@ const orderSchema = {
     enum: ['pending', 'approved']
   },
   food_details: {
-    type: Array
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Food'
   },
   total_price: {
     type: Number,
