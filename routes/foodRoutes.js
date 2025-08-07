@@ -2,13 +2,10 @@ const foodCtrl = require('../controllers/foodController')
 
 
 //get all food items
-router.get('/foods', foodCtrl)
+router.post('/foods', foodCtrl.PostFoods)
+router.get('/foods', foodCtrl.GetFoods)
+router.get('/:id/foods', foodCtrl.GetFoodsId)
+router.put('/:id/foods', foodCtrl.UpdateFood)
+router.delete('/:id/foods', foodCtrl.DeleteFood)
 
-//get all food in a specific cuisine
-router.get('/foods?cuisine')
-
-
-
-
-
-router.post('/foods', foodCtrl)
+module.exports = router

@@ -1,6 +1,19 @@
 const { Food } = require('../models/Food')
 
 
+//post food item
+
+const PostFoods = async (req, res) => {
+try {
+    const food = await Food.create({ ...req.body })
+    res.status(200).send(food)
+  } catch (error) {
+    throw error
+  }
+}
+
+
+
 //getting all food
 const GetFoods = async (req, res) => {
 try {
@@ -50,3 +63,10 @@ const DeleteFood = async (req, res) => {
   }
 }
 
+module.exports = {
+  PostFoods,
+  GetFoods,
+  GetFoodsId,
+  UpdateFood,
+  DeleteFood
+}
