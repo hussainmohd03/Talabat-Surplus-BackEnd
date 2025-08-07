@@ -9,14 +9,18 @@ const foodSchema = new Schema({
   description: {
     type: String
   },
+  cuisine: {
+    type: String
+  },
   image_url: {
     type: String
   },
   original_price: {
     type: Number
-  }, 
+  },
   restaurant_id: {
-    type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Restaurant'
   }
 })
 
