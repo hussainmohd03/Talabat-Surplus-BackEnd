@@ -55,34 +55,47 @@ exports.Login = async (req, res) => {
 
 exports.UpdatePassword = async (req, res) => {
   try {
-    const { old_password, new_password } = req.body
+    if (req.query.activity === 'password') {
+      const { old_password, new_password } = req.body
 
-    let userInDB = await Customer.findById(req.params.cust_id)
+      let userInDB = await Customer.findById(req.params.cust_id)
 
-    let matched = await middleWares.comparePassword(
-      old_password,
-      userInDB.password_digest
-    )
+      let matched = await middleWares.comparePassword(
+        old_password,
+        userInDB.password_digest
+      )
 
-    if (matched) {
-      let passwordDigest = await middleWares.hashPassword(new_password)
+      if (matched) {
+        let passwordDigest = await middleWares.hashPassword(new_password)
 
-      userInDB = await Customer.findByIdAndUpdate(req.params.cust_id, {
-        password_digest: passwordDigest
-      })
-      let payload = {
-        id: userInDB._id,
-        email: userInDB.email,
-        role: 'customer'
+        userInDB = await Customer.findByIdAndUpdate(req.params.cust_id, {
+          password_digest: passwordDigest
+        })
+        let payload = {
+          id: userInDB._id,
+          email: userInDB.email,
+          role: 'customer'
+        }
+        return res
+          .status(200)
+          .send({ status: 'password Updated successfully', user: payload })
+      } else if (req.query.activity === 'profile') {
+        userInDB = await Customer.findByIdAndUpdate(
+          req.params.cust_id,
+          req.body
+        )
+        let payload = {
+          id: userInDB._id,
+          email: userInDB.email,
+          role: 'customer'
+        }
+        return res
+          .status(200)
+          .send({ status: 'profile updated successfully', user: payload })
       }
-      return res
-        .status(200)
-        .send({ status: 'password Updated successfully', user: payload })
     }
     res.status(401).send({ status: 'Error', msg: 'updated Password failed' })
   } catch (error) {
     throw error
   }
 }
-
-
