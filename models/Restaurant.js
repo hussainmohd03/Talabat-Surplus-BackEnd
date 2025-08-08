@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const restaurantSchema = new Schema({
+const restaurantSchema = new mongoose.Schema({
   rest_name: { type: String, required: true },
   rest_tel: {
     type: Number,

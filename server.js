@@ -4,35 +4,39 @@ require('dotenv').config()
 const cors = require('cors')
 const path = require('path')
 
-// Initialize app
+// initialize app
 const app = express()
 
-// Database Configuration
+// database configuration
 const mongoose = require('./config/db')
 
-// set Port Configuration
+// set port configuration
 const port = process.env.PORT ? process.env.PORT : 3000
 
-// Require MiddleWares
+// require middlwares
 const morgan = require('morgan')
 
-// use MiddleWares
+// use middlewares
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(cors())
 app.use(express.json())
 
-// Root Route
+// root route
 app.get('/', (req, res) => {
   res.send('Your app is connected . . . ')
 })
 
-// Require Routers
+// require routers
+const orderRouter = require('./routes/orderRouter')
+const customerRouter = require('./routes/customerRouter')
 
-// use Routers
+// use routers
+app.use('/orders', orderRouter)
+app.use('/customers', customerRouter)
 
-// Listener
+// listener
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`)
 })

@@ -1,17 +1,17 @@
 const mongoose = require('mongoose')
 
-const orderSchema = {
+const orderSchema = new mongoose.Schema({
   payment_status: {
     type: String,
-    enum: ['pending', 'approved']
+    enum: ['pending', 'approved', 'cancelled']
   },
   order_status: {
     type: String,
-    enum: ['pending', 'approved']
+    enum: ['pending', 'approved', 'cancelled']
   },
-  food_details: {
-    type: Array
-  },
+  food_details: [{
+    type: String
+  }],
   total_price: {
     type: Number,
     required: true
@@ -20,10 +20,16 @@ const orderSchema = {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Customer'
   },
-  restaurant_id: {
+  restaurant_id: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Restaurant'
-  }
-}
+  }],
+  food_id: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Food'
+    }
+  ]
+})
 
 module.exports = mongoose.model('Order', orderSchema)
