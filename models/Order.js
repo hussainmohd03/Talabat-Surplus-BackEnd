@@ -35,6 +35,6 @@ const orderSchema = mongoose.Schema(
   {
     timestamps: true // createdAt & updatedAt
   }
-
+)
 
 module.exports = mongoose.model('Order', orderSchema)

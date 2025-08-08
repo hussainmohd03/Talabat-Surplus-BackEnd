@@ -34,7 +34,7 @@ const orderRouter = require('./routes/orderRouter')
 const foodRouter = require('./routes/foodRoutes')
 const reviewRouter = require('./routes/reviewRouter')
 const CustomerRT = require('./routes/Customer')
-const RestaurantRT = require('./routes/Restaurant')
+// const RestaurantRT = require('./routes/Restaurant')
 const checkSession = require('./routes/session')
 const authRt = require('./routes/Auth')
 
@@ -43,11 +43,8 @@ app.use('/orders', orderRouter)
 app.use('/foods', foodRouter)
 app.use('/reviews', reviewRouter)
 app.use('/customers', CustomerRT)
-app.use('/restaurants', RestaurantRT)
+// app.use('/restaurants', RestaurantRT)
 app.use('/session', checkSession)
-
-
-// use Router
 app.use('/auth', authRt)
 
 
