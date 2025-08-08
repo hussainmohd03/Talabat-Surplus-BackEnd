@@ -29,11 +29,16 @@ app.get('/', (req, res) => {
 })
 
 // Require Routers
-const customerRouter = require('./routes/customerRoutes')
-const foodRouter = require('./routes/foodRoutes')
-const restRouter = require('./routes/resRoutes')
+
+const CustomerRT = require('./routes/Customer')
+const RestaurantRT = require('./routes/Restaurant')
+const checkSession = require('./routes/session')
+
 
 // use Routers
+app.use('/customer', CustomerRT)
+app.use('/restaurant', RestaurantRT)
+app.use('/session', checkSession)
 
 // Listener
 app.listen(port, () => {
