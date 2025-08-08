@@ -17,7 +17,7 @@ exports.Register = async (req, res) => {
       rest_tel: rest_tel,
       email: email,
       password_digest: passwordDigest,
-      address: address,
+      rest_address: address,
       CR: CR
     }
 
@@ -43,7 +43,7 @@ exports.Login = async (req, res) => {
       const payload = {
         id: userInDB._id,
         email: userInDB.email,
-        role: 'customer'
+        role: 'restaurant'
       }
       let token = middleWares.createToken(payload)
       return res.status(200).send({ user: payload, token })
