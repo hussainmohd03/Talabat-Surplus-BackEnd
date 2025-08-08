@@ -29,6 +29,9 @@ app.get('/', (req, res) => {
 })
 
 // Require Routers
+const customerRouter = require('./routes/customerRoutes')
+const foodRouter = require('./routes/foodRoutes')
+const restRouter = require('./routes/resRoutes')
 
 // use Routers
 

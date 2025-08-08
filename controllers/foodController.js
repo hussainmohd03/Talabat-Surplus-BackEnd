@@ -1,4 +1,4 @@
-const { Food } = require('../models/Food')
+const Food  = require('../models/Food')
 
 
 //post food item
@@ -25,10 +25,11 @@ try {
 }
 
 
-// get by Id
+// get food item by Id
 const GetFoodsId = async (req, res) => {
   try {
-    const foodId = await Food.findById(req.params.food_id)
+    const food = await Food.findById(req.params.food_id)
+  res.status(200).send(food)
   } catch(error){
   throw error
 }

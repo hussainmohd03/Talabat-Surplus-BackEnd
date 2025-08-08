@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const orderSchema = {
+const orderSchema = new mongoose.Schema({
   payment_status: {
     type: String,
     enum: ['pending', 'approved']
@@ -24,6 +24,6 @@ const orderSchema = {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Restaurant'
   }
-}
+})
 
 module.exports = mongoose.model('Order', orderSchema)
