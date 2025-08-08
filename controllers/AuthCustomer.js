@@ -11,6 +11,16 @@ exports.Register = async (req, res) => {
 
     let passwordDigest = await middleWares.hashPassword(req.body.password)
 
-    let 
-  } catch (error) {}
+    req.body.password = passwordDigest
+
+    const newUser = await Customer.create(req.body)
+
+    res.status(200).send(newUser)
+  } catch (error) {
+    throw error
+  }
+}
+
+exports.Login = async (req, res) => {
+  
 }
