@@ -1,29 +1,38 @@
 const mongoose = require('mongoose')
 
-const orderSchema = {
-  payment_status: {
-    type: String,
-    enum: ['pending', 'approved']
+const orderSchema = mongoose.Schema(
+  {
+    payment_status: {
+      type: String,
+      enum: ['pending', 'approved']
+    },
+    order_status: {
+      type: String,
+      enum: ['pending', 'approved']
+    },
+    food_details: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Food'
+    },
+    total_price: {
+      type: Number,
+      required: true
+    },
+    customer_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Customer',
+      required: true
+    },
+    restaurant_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Restaurant',
+      required: true
+    }
   },
-  order_status: {
-    type: String,
-    enum: ['pending', 'approved']
-  },
-  food_details: {
-    type: Array
-  },
-  total_price: {
-    type: Number,
-    required: true
-  },
-  customer_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Customer'
-  },
-  restaurant_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant'
+
+  {
+    timestamps: true // createdAt & updatedAt
   }
-}
+)
 
 module.exports = mongoose.model('Order', orderSchema)
