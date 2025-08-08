@@ -1,10 +1,10 @@
-const Customer = require('../models/Customer')
+const Restaurant = require('../models/Restaurant')
 const middleWares = require('../middlewares')
 
 exports.Register = async (req, res) => {
   try {
-    const { email, password, first_name, last_name, address } = req.body
-    let userInDB = await Customer.findOne({ email })
+    const { email, password, name, rest_tel, address, CR } = req.body
+    let userInDB = await Restaurant.findOne({ email })
 
     if (userInDB) {
       return res.send(400).send('user with this email already exists')
@@ -13,14 +13,15 @@ exports.Register = async (req, res) => {
     let passwordDigest = await middleWares.hashPassword(password)
 
     const data = {
-      first_name: first_name,
-      last_name: last_name,
+      rest_name: name,
+      rest_tel: rest_tel,
       email: email,
       password_digest: passwordDigest,
-      address: address
+      address: address,
+      CR: CR
     }
 
-    const newUser = await Customer.create(data)
+    const newUser = await Restaurant.create(data)
 
     res.status(200).send(newUser)
   } catch (error) {
@@ -32,7 +33,7 @@ exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body
 
-    const userInDB = await Customer.findOne({ email })
+    const userInDB = await Restaurant.findOne({ email })
 
     let matched = await middleWares.comparePassword(
       password,
@@ -57,7 +58,7 @@ exports.UpdatePassword = async (req, res) => {
   try {
     const { old_password, new_password } = req.body
 
-    let userInDB = await Customer.findById(req.params.cust_id)
+    let userInDB = await Restaurant.findById(req.params.cust_id)
 
     let matched = await middleWares.comparePassword(
       old_password,
@@ -67,13 +68,13 @@ exports.UpdatePassword = async (req, res) => {
     if (matched) {
       let passwordDigest = await middleWares.hashPassword(new_password)
 
-      userInDB = await Customer.findByIdAndUpdate(req.params.cust_id, {
+      userInDB = await Restaurant.findByIdAndUpdate(req.params.cust_id, {
         password_digest: passwordDigest
       })
       let payload = {
         id: userInDB._id,
         email: userInDB.email,
-        role: 'customer'
+        role: 'restaurant'
       }
       return res
         .status(200)
@@ -84,5 +85,3 @@ exports.UpdatePassword = async (req, res) => {
     throw error
   }
 }
-
-

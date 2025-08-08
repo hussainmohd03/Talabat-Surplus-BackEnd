@@ -50,3 +50,8 @@ exports.verifyToken = (req, res, next) => {
     res.status(401).send({ status: 'Error', msg: 'Verify Token Error!' })
   }
 }
+
+exports.CheckSession = async (req, res) => {
+  const { payload } = res.locals
+  res.status(200).send(payload)
+}

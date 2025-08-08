@@ -30,9 +30,11 @@ app.get('/', (req, res) => {
 
 // Require Routers
 const CustomerRT = require('./routes/Customer')
+const checkSession = require('./routes/session')
 
 // use Routers
 app.use('/customer', CustomerRT)
+app.use('/session', checkSession)
 
 // Listener
 app.listen(port, () => {
