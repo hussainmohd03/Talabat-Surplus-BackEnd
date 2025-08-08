@@ -1,5 +1,13 @@
 const Review = require('../models/Review')
 
+// get a review
+const getReview = async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.id)
+    res.send(review)
+  } catch (error) {}
+}
+
 // get all reviews
 const getAllReviews = async (req, res) => {
   try {
@@ -40,8 +48,15 @@ const updateReview = async (req, res) => {
 const deleteReview = async (req, res) => {
   try {
     await Review.deleteOne({ _id: req.params.id })
+    res.status(200).send({ msg: 'review deleted' })
   } catch (error) {
     console.log('error in deleting review', error)
   }
 }
-module.exports = { getAllReviews, postReview, updateReview, deleteReview }
+module.exports = {
+  getReview,
+  getAllReviews,
+  postReview,
+  updateReview,
+  deleteReview
+}

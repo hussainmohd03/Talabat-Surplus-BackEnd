@@ -77,23 +77,31 @@ const updateOrder = async (req, res) => {
 
     // remove a singular food item from the array of food_id where it matches with the query param foodId (only if status is pending)
     // update price, food details, and restaurant details accordingly
+
     if (req.query.action === 'remove' && req.query.status === 'pending') {
+      const itemId = await Food.findById(req.query.foodId)
+      const currentCart = await Order.findById(req.params.id)
       const updatedOrder = await Order.findByIdAndUpdate(
-        req.query.id,
+        req.params.id,
         {
-          $pull: { food_id: req.query.foodId }
+          $pull: { food_id: req.query.foodId },
+          total_price: currentCart.total_price - parseInt(itemId.price),
+          $pull: { restaurant_id: currentCart.restaurant_id }
         },
         {
           new: true
         }
       )
-      const updatePrice = await Food.findById(req.query.foodId)
-      console.log(updatePrice)
       res.send(updatedOrder)
+    }
+
+    if (req.query.action === 'add' && req.query.status === 'pending') {
+      
     }
   } catch (error) {
     console.log(error)
   }
+  // add items
 }
 
 module.exports = { getOrder, getOrdersByUserId, placeOrder, updateOrder }

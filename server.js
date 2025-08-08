@@ -31,10 +31,14 @@ app.get('/', (req, res) => {
 // require routers
 const orderRouter = require('./routes/orderRouter')
 const customerRouter = require('./routes/customerRouter')
+const foodRouter = require('./routes/foodRoutes')
+const reviewRouter = require('./routes/reviewRouter')
 
 // use routers
 app.use('/orders', orderRouter)
 app.use('/customers', customerRouter)
+app.use('/foods', foodRouter)
+app.use('/reviews', reviewRouter)
 
 // listener
 app.listen(port, () => {
