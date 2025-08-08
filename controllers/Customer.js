@@ -3,7 +3,7 @@ const middleWares = require('../middlewares')
 
 exports.Register = async (req, res) => {
   try {
-    const { email, password, first_name, last_name } = req.body
+    const { email, password, first_name, last_name, address } = req.body
     let userInDB = await Customer.findOne({ email })
 
     if (userInDB) {
@@ -16,7 +16,8 @@ exports.Register = async (req, res) => {
       first_name: first_name,
       last_name: last_name,
       email: email,
-      password_digest: passwordDigest
+      password_digest: passwordDigest,
+      address: address
     }
 
     const newUser = await Customer.create(data)
@@ -47,6 +48,38 @@ exports.Login = async (req, res) => {
       return res.status(200).send({ user: payload, token })
     }
     res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
+  } catch (error) {
+    throw error
+  }
+}
+
+exports.UpdatePassword = async (req, res) => {
+  try {
+    const { old_password, new_password } = req.body
+
+    let userInDB = await Customer.findById(req.params.cust_id)
+
+    let matched = await middleWares.comparePassword(
+      old_password,
+      userInDB.password_digest
+    )
+
+    if (matched) {
+      let passwordDigest = await middleWares.hashPassword(new_password)
+
+      userInDB = Customer.findByIdAndUpdate(req.params.cust_id, {
+        password_digest: passwordDigest
+      })
+      let payload = {
+        id: userInDB._id,
+        email: userInDB.email,
+        role: 'customer'
+      }
+      return res
+        .status(200)
+        .send({ status: 'password Updated successfully', user: payload })
+    }
+    res.status(401).send({ status: 'Error', msg: 'updated Password failed' })
   } catch (error) {
     throw error
   }
