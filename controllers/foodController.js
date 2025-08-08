@@ -1,6 +1,5 @@
 const Food = require('../models/Food')
 
-
 // post food item
 const postFood = async (req, res) => {
   try {
@@ -11,11 +10,16 @@ const postFood = async (req, res) => {
   }
 }
 
-// getting all food
+// getting all food depending if query param exists
 const getAllFood = async (req, res) => {
   try {
-    const foods = await Food.find({})
-    res.status(200).send(foods)
+    if (req.query.cuisine) {
+      const foodList = await Food.find({ cuisine: req.query.cuisine })
+      res.send(foodList)
+    } else {
+      const foods = await Food.find({})
+      res.status(200).send(foods)
+    }
   } catch (error) {
     throw error
   }
