@@ -28,7 +28,6 @@ app.get('/', (req, res) => {
   res.send('Your app is connected . . . ')
 })
 
-
 // require routers
 const orderRouter = require('./routes/orderRouter')
 const foodRouter = require('./routes/foodRoutes')
@@ -46,6 +45,7 @@ app.use('/customers', CustomerRT)
 // app.use('/restaurants', RestaurantRT)
 app.use('/session', checkSession)
 app.use('/auth', authRt)
+
 
 
 // listener

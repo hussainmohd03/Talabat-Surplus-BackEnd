@@ -1,4 +1,3 @@
-
 const controller = require('../controllers/foodController')
 const router = require('express').Router()
 
