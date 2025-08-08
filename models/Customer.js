@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
-
-const customerSchema = mongoose.Schema(
+const customerSchema = new mongoose.Schema(
   {
     first_name: {
       type: String,
@@ -29,12 +28,11 @@ const customerSchema = mongoose.Schema(
     avatar_url: {
       type: String
     }
-
   },
 
   {
     timestamps: true // createdAt & updatedAt
   }
-
+)
 
 module.exports = mongoose.model('Customer', customerSchema)
