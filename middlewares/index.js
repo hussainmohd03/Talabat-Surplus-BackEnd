@@ -13,7 +13,6 @@ exports.hashPassword = async (password) => {
 
 exports.comparePassword = async (password, passwordDigest) => {
   let matched = await bcrypt.compare(password, passwordDigest)
-
   return matched
 }
 
