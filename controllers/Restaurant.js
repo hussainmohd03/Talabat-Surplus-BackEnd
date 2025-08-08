@@ -58,7 +58,7 @@ exports.UpdatePassword = async (req, res) => {
   try {
     const { old_password, new_password } = req.body
 
-    let userInDB = await Restaurant.findById(req.params.cust_id)
+    let userInDB = await Restaurant.findById(req.params.rest_id)
 
     let matched = await middleWares.comparePassword(
       old_password,
@@ -68,7 +68,7 @@ exports.UpdatePassword = async (req, res) => {
     if (matched) {
       let passwordDigest = await middleWares.hashPassword(new_password)
 
-      userInDB = await Restaurant.findByIdAndUpdate(req.params.cust_id, {
+      userInDB = await Restaurant.findByIdAndUpdate(req.params.rest_id, {
         password_digest: passwordDigest
       })
       let payload = {
