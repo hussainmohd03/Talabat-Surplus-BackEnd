@@ -67,7 +67,7 @@ exports.UpdatePassword = async (req, res) => {
     if (matched) {
       let passwordDigest = await middleWares.hashPassword(new_password)
 
-      userInDB = Customer.findByIdAndUpdate(req.params.cust_id, {
+      userInDB = await Customer.findByIdAndUpdate(req.params.cust_id, {
         password_digest: passwordDigest
       })
       let payload = {
