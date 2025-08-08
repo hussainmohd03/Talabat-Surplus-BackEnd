@@ -47,11 +47,11 @@ const updateFood = async (req, res) => {
 const deleteFood = async (req, res) => {
   try {
     await Food.deleteOne({
-      _id: req.params.food_id
+      _id: req.params.id
     })
     res.status(200).send({
       msg: 'food item deleted',
-      payload: req.params.food_id,
+      payload: req.params.id,
       status: 'Ok'
     })
   } catch (error) {
