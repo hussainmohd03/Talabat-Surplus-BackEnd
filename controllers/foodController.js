@@ -1,10 +1,8 @@
-const Food  = require('../models/Food')
+const Food = require('../models/Food')
 
-
-//post food item
-
-const PostFoods = async (req, res) => {
-try {
+// post food item
+const postFood = async (req, res) => {
+  try {
     const food = await Food.create({ ...req.body })
     res.status(200).send(food)
   } catch (error) {
@@ -12,62 +10,63 @@ try {
   }
 }
 
-
-
-//getting all food
-const GetFoods = async (req, res) => {
-try {
-  const foods = await Food.find({})
-  res.status(200).send(foods)
-} catch (error) {
-  throw error
-}
-}
-
-
-// get food item by Id
-const GetFoodsId = async (req, res) => {
+// getting all food depending if query param exists
+const getAllFood = async (req, res) => {
   try {
-    const food = await Food.findById(req.params.food_id)
-  res.status(200).send(food)
-  } catch(error){
-  throw error
-}
+    if (req.query.cuisine) {
+      const foodList = await Food.find({ cuisine: req.query.cuisine })
+      res.send(foodList)
+    } else {
+      const foods = await Food.find({})
+      res.status(200).send(foods)
+    }
+  } catch (error) {
+    throw error
+  }
 }
 
-
+// get food  item
+const getFood = async (req, res) => {
+  try {
+    const foodId = await Food.findById(req.params.id)
+    res.send(foodId)
+  } catch (error) {
+    throw error
+  }
+}
 
 // updating
-const UpdateFood = async (req, res) => {
-try {
-    const food = await Food.findByIdAndUpdate(req.params.food_id, req.body, {
+const updateFood = async (req, res) => {
+  try {
+    const food = await Food.findByIdAndUpdate(req.params.id, req.body, {
       new: true
     })
     res.status(200).send(food)
   } catch (error) {
     throw error
   }
-} 
+}
 
-//Delete
-
-const DeleteFood = async (req, res) => {
-  try{
+// delete
+const deleteFood = async (req, res) => {
+  try {
     await Food.deleteOne({
-      _id: req.params.food_id})
-      res.status(200).send({
-        msg: 'Food Item Deleted',
-        payload: req.params.food_id, 
-        status: 'Ok' })
+      _id: req.params.id
+    })
+    res.status(200).send({
+      msg: 'food item deleted',
+      payload: req.params.id,
+      status: 'Ok'
+    })
   } catch (error) {
     throw error
   }
 }
 
 module.exports = {
-  PostFoods,
-  GetFoods,
-  GetFoodsId,
-  UpdateFood,
-  DeleteFood
+  postFood,
+  getAllFood,
+  getFood,
+  updateFood,
+  deleteFood
 }
