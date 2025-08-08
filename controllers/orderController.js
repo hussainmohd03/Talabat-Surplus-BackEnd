@@ -83,9 +83,39 @@ const updateOrder = async (req, res) => {
       const updatedOrder = await Order.findByIdAndUpdate(
         req.params.id,
         {
-          $pull: { food_id: req.query.foodId },
-          total_price: currentCart.total_price - parseInt(itemId.price),
-          $pull: { restaurant_id: currentCart.restaurant_id }
+          $pull: {
+            food_id: req.query.foodId,
+            restaurant_id: currentCart.restaurant_id
+          },
+          // looked $set up
+          // will continue to do this even if it goes to negatives
+          $set: {
+            total_price: currentCart.total_price - parseInt(itemId.price)
+          }
+        },
+        {
+          new: true
+        }
+      )
+      console.log(updatedOrder)
+      res.send(updatedOrder)
+    }
+
+    // append da order cart w new items
+    if (req.query.action === 'add' && req.query.status === 'pending') {
+      const itemId = await Food.findById(req.query.foodId)
+      const currentCart = await Order.findById(req.params.id)
+      const updatedOrder = await Order.findByIdAndUpdate(
+        req.params.id,
+        {
+          $push: {
+            food_id: req.query.foodId,
+            restaurant_id: currentCart.restaurant_id
+          },
+          // looked $set up
+          $set: {
+            total_price: currentCart.total_price + parseInt(itemId.price)
+          }
         },
         {
           new: true
@@ -93,14 +123,9 @@ const updateOrder = async (req, res) => {
       )
       res.send(updatedOrder)
     }
-
-    if (req.query.action === 'add' && req.query.status === 'pending') {
-      
-    }
   } catch (error) {
     console.log(error)
   }
-  // add items
 }
 
 module.exports = { getOrder, getOrdersByUserId, placeOrder, updateOrder }
