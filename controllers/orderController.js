@@ -63,7 +63,6 @@ const updateOrder = async (req, res) => {
       const clearedOrder = await Order.findByIdAndUpdate(
         req.params.id,
         {
-          food_details: [],
           total_price: 0,
           food_id: [],
           restaurant_id: []

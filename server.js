@@ -28,17 +28,25 @@ app.get('/', (req, res) => {
   res.send('Your app is connected . . . ')
 })
 
+
 // require routers
 const orderRouter = require('./routes/orderRouter')
-const customerRouter = require('./routes/customerRouter')
+// const customerRouter = require('./routes/customerRouter')
 const foodRouter = require('./routes/foodRoutes')
 const reviewRouter = require('./routes/reviewRouter')
+const CustomerRT = require('./routes/Customer')
+const RestaurantRT = require('./routes/Restaurant')
+const checkSession = require('./routes/session')
 
 // use routers
 app.use('/orders', orderRouter)
-app.use('/customers', customerRouter)
+// app.use('/customers', customerRouter)
 app.use('/foods', foodRouter)
 app.use('/reviews', reviewRouter)
+app.use('/customer', CustomerRT)
+app.use('/restaurant', RestaurantRT)
+app.use('/session', checkSession)
+
 
 // listener
 app.listen(port, () => {
