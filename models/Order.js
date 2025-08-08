@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+
 const orderSchema = mongoose.Schema(
   {
     payment_status: {
@@ -28,11 +29,12 @@ const orderSchema = mongoose.Schema(
       ref: 'Restaurant',
       required: true
     }
+
   },
 
   {
     timestamps: true // createdAt & updatedAt
   }
-)
+
 
 module.exports = mongoose.model('Order', orderSchema)

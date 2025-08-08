@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+
 const reviewsSchema = mongoose.Schema(
   {
     restaurant_comment: {
@@ -20,6 +21,7 @@ const reviewsSchema = mongoose.Schema(
 
   {
     timestamps: true // createdAt & updatedAt
+
   }
 )
 

@@ -29,9 +29,11 @@ app.get('/', (req, res) => {
 })
 
 // Require Routers
+
 const CustomerRT = require('./routes/Customer')
 const RestaurantRT = require('./routes/Restaurant')
 const checkSession = require('./routes/session')
+
 
 // use Routers
 app.use('/customer', CustomerRT)
