@@ -10,6 +10,14 @@ router.put(
   middleWares.verifyToken,
   UserCtrl.UpdatePassword
 )
+
+router.put(
+  '/profile',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  UserCtrl.UpdateAccount
+)
+
 router.get(
   '/profile',
   middleWares.stripToken,

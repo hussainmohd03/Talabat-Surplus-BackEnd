@@ -25,10 +25,12 @@ exports.Register = async (req, res) => {
       data.first_name = req.body.first_name
       data.last_name = req.body.last_name
       data.address = req.body.address
+      data.avatar_url = req.body.avatar_url
     } else if (role === 'restaurant') {
-      data.rest_name = req.body.name
+      data.rest_name = req.body.rest_name
       data.rest_tel = req.body.rest_tel
-      data.rest_address = req.body.address
+      data.rest_address = req.body.rest_address
+      data.email = req.body.email
       data.CR = req.body.CR
     }
 
@@ -55,8 +57,8 @@ exports.Login = async (req, res) => {
     )
 
     if (matched) {
-      const payload = { id: userInDB._id, email: userInDB.email, role }
-      const token = middleWares.createToken(payload)
+      let payload = { id: userInDB._id, email: userInDB.email, role }
+      let token = middleWares.createToken(payload)
       return res.status(200).send({ user: payload, token })
     }
 
@@ -110,6 +112,7 @@ exports.UpdatePassword = async (req, res) => {
   }
 }
 
+<<<<<<< HEAD
 exports.getProfileById = async (req, res) => {
   try {
     const { role, id } = res.locals.payload
