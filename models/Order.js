@@ -28,11 +28,11 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Restaurant',
       required: true
-    }]
-    },
+    }]},
   {
     timestamps: true // createdAt & updatedAt
-  })
+  }
+)
 
 
 module.exports = mongoose.model('Order', orderSchema)

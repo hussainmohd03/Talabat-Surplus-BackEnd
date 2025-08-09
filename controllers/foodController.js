@@ -28,10 +28,10 @@ const getAllFood = async (req, res) => {
 // get food  item
 const getFood = async (req, res) => {
   try {
-    const foodId = await Food.findById(req.params.id)
-    res.send(foodId)
+    const food = await Food.findById(req.params.id)
+    res.send(food)
   } catch (error) {
-    throw error
+    console.log(error)
   }
 }
 
@@ -70,4 +70,3 @@ module.exports = {
   updateFood,
   deleteFood
 }
-
