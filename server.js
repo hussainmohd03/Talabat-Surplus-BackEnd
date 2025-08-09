@@ -32,18 +32,18 @@ app.get('/', (req, res) => {
 const orderRouter = require('./routes/orderRouter')
 const foodRouter = require('./routes/foodRoutes')
 const reviewRouter = require('./routes/reviewRouter')
-const CustomerRT = require('./routes/Customer')
+// const CustomerRT = require('./routes/Customer')
 // const RestaurantRT = require('./routes/Restaurant')
-const checkSession = require('./routes/session')
+// const checkSession = require('./routes/session')
 const authRt = require('./routes/Auth')
 
 // use routers
 app.use('/orders', orderRouter)
 app.use('/foods', foodRouter)
 app.use('/reviews', reviewRouter)
-app.use('/customers', CustomerRT)
+// app.use('/customers', CustomerRT)
 // app.use('/restaurants', RestaurantRT)
-app.use('/session', checkSession)
+// app.use('/session', checkSession)
 app.use('/auth', authRt)
 
 
