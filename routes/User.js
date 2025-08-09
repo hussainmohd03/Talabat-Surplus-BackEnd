@@ -19,6 +19,24 @@ router.put(
 )
 
 router.get(
+  '/profile',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  UserCtrl.getProfileById
+)
+router.put(
+  '/profile',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  UserCtrl.updateProfile
+)
+router.delete(
+  '',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  UserCtrl.deleteProfile
+)
+router.get(
   '/session',
   middleWares.stripToken,
   middleWares.verifyToken,

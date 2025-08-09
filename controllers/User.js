@@ -112,171 +112,50 @@ exports.UpdatePassword = async (req, res) => {
   }
 }
 
-exports.UpdateAccount = async (req, res) => {
+<<<<<<< HEAD
+exports.getProfileById = async (req, res) => {
   try {
-    const { role } = res.locals.payload
-    const { id } = res.locals.payload
+    const { role, id } = res.locals.payload
     const Model = getModel(role)
 
-    const userInDB = await Model.findById(id)
-    const matched = id === userInDB._id.toString()
+    const profile = await Model.findById(id)
+    if (!profile) return res.status(404).send({ msg: `${role} not found` })
 
-    if (!userInDB) {
-      return res.status(404).send({ status: 'Error', msg: 'User not found' })
-    } else if (matched && role === 'customer') {
-      let user = ''
-      let payload = ''
+    res.status(200).send(profile)
+  } catch (error) {
+    throw error
+  }
+}
 
-      switch (req.query.action) {
-        case 'avatar_url':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { avatar_url: req.body.avatar_url },
-            {
-              new: true
-            }
-          )
-          payload = { id: user._id, email: user.email, role }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
+exports.deleteProfile = async (req, res) => {
+  try {
+    const { role, id } = res.locals.payload
+    const Model = getModel(role)
 
-        case 'first_name':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { first_name: req.body.first_name },
-            {
-              new: true
-            }
-          )
-          payload = { id: user._id, email: user.email, role }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
+    const deleted = await Model.findByIdAndDelete(id)
+    if (deleted)
+      return res.status(200).send({ msg: `${role} profile deleted`, deleted })
 
-        case 'last_name':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { last_name: req.body.last_name },
-            {
-              new: true
-            }
-          )
-          payload = { id: user._id, email: user.email, role }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
+    return res.status(404).send({ msg: `${role} not found` })
+  } catch (error) {
+    throw error
+  }
+}
 
-        case 'phone_number':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { phone_number: req.body.phone_number },
-            {
-              new: true
-            }
-          )
-          payload = { id: user._id, email: user.email, role }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
+exports.updateProfile = async (req, res) => {
+  try {
+    const { role, id } = res.locals.payload
+    const Model = getModel(role)
 
-        case 'address':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { address: req.body.address },
-            {
-              new: true
-            }
-          )
-          payload = {
-            id: user._id,
-            email: user.email,
-            role
-          }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
-      }
-    } else if (matched && role === 'restaurant') {
-      let user = ''
-      let payload = ''
+    const updatedProfile = await Model.findByIdAndUpdate(id, req.body, {
+      new: true
+    })
 
-      switch (req.query.action) {
-        case 'rest_name':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { rest_name: req.body.rest_name },
-            {
-              new: true
-            }
-          )
-          payload = { id: user._id, email: user.email, role }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
+    if (!updatedProfile)
+      return res.status(404).send({ msg: `${role} not found` })
 
-        case 'rest_address':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { rest_address: req.body.rest_address },
-            {
-              new: true
-            }
-          )
-          payload = { id: user._id, email: user.email, role }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
-
-        case 'bio':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { bio: req.body.bio },
-            {
-              new: true
-            }
-          )
-          payload = { id: user._id, email: user.email, role }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
-
-        case 'logo_url':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { logo_url: req.body.logo_url },
-            {
-              new: true
-            }
-          )
-          payload = { id: user._id, email: user.email, role }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
-
-        case 'email':
-          user = await Model.findByIdAndUpdate(
-            id,
-            { email: req.body.email },
-            {
-              new: true
-            }
-          )
-          payload = { id: user._id, email: user.email, role }
-          return res.status(200).send({
-            status: `${req.query.action} updated successfully`,
-            user: payload
-          })
-      }
-    }
-  } catch (error) {}
+    res.status(200).send({ msg: `${role} profile updated` })
+  } catch (error) {
+    throw error
+  }
 }
