@@ -112,7 +112,6 @@ exports.UpdatePassword = async (req, res) => {
   }
 }
 
-<<<<<<< HEAD
 exports.getProfileById = async (req, res) => {
   try {
     const { role, id } = res.locals.payload
