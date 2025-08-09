@@ -16,6 +16,12 @@ router.get(
   middleWares.verifyToken,
   UserCtrl.getProfileById
 )
+router.delete(
+  '',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  UserCtrl.deleteProfile
+)
 router.get(
   '/session',
   middleWares.stripToken,
