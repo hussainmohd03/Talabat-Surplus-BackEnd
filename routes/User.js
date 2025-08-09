@@ -12,10 +12,10 @@ router.put(
 )
 
 router.put(
-  '/:id',
+  '/profile',
   middleWares.stripToken,
   middleWares.verifyToken,
-  AuthCtrl.UpdateAccount
+  UserCtrl.UpdateAccount
 )
 
 router.get(
