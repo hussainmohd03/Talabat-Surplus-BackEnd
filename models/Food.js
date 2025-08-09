@@ -25,7 +25,6 @@ const foodSchema = new mongoose.Schema(
       required: true
     }
   },
-
   {
     timestamps: true // createdAt & updatedAt
   }

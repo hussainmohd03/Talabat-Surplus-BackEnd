@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 
-
 const restaurantSchema = new mongoose.Schema(
   {
     rest_name: { type: String, required: true },

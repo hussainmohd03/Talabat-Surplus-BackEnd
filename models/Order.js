@@ -11,10 +11,10 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: ['pending', 'approved']
     },
-    food_details: {
+    food_id: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Food'
-    },
+    }],
     total_price: {
       type: Number,
       required: true
@@ -24,14 +24,12 @@ const orderSchema = new mongoose.Schema(
       ref: 'Customer',
       required: true
     },
-    restaurant_id: {
+    restaurant_id: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Restaurant',
       required: true
-    }
-
-  },
-
+    }]
+    },
   {
     timestamps: true // createdAt & updatedAt
   })
