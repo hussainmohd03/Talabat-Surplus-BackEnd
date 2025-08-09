@@ -15,7 +15,7 @@ router.put(
   '/profile',
   middleWares.stripToken,
   middleWares.verifyToken,
-  UserCtrl.UpdateAccount
+  UserCtrl.updateProfile
 )
 
 router.get(
