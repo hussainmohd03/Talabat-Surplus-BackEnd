@@ -35,7 +35,7 @@ exports.Register = async (req, res) => {
     const newUser = await Model.create(data)
     res.status(200).send(newUser)
   } catch (error) {
-    res.status(500).send(error.message)
+    throw error
   }
 }
 
@@ -62,14 +62,14 @@ exports.Login = async (req, res) => {
 
     res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
   } catch (error) {
-    res.status(500).send(error.message)
+    throw error
   }
 }
 
 exports.UpdatePassword = async (req, res) => {
   try {
-    const { role } = req.query
-    const { id } = req.params
+    const { role } = res.locals.payload
+    const { id } = res.locals.payload
     const Model = getModel(role)
 
     let userInDB = await Model.findById(id)
@@ -77,6 +77,12 @@ exports.UpdatePassword = async (req, res) => {
       return res.status(404).send({ status: 'Error', msg: 'User not found' })
     }
 
+    if (!req.body.old_password || !req.body.new_password) {
+      return res
+        .status(400)
+        .send({ status: 'Error', msg: 'Old and new passwords are required' })
+    }
+    
     const matched = await middleWares.comparePassword(
       req.body.old_password,
       userInDB.password_digest
@@ -100,6 +106,6 @@ exports.UpdatePassword = async (req, res) => {
 
     res.status(401).send({ status: 'Error', msg: 'Update password failed' })
   } catch (error) {
-    res.status(500).send(error.message)
+    throw error
   }
 }
