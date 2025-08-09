@@ -9,9 +9,7 @@ const loginLimiter = rateLimit({
   message: {
     status: 'Error',
     msg: 'Too many login attempts, try again in 10 minutes'
-  },
-  standardHeaders: true,
-  legacyHeaders: false
+  }
 })
 
 router.post('/login', loginLimiter, UserCtrl.Login)

@@ -80,6 +80,7 @@ exports.Login = async (req, res) => {
     if (userInDB.failedLoginAttempts >= 5)
       // lock account for 10 minutes
       userInDB.lockUntil = Date.now() + 10 * 60 * 1000
+    await userInDB.save()
 
     res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
   } catch (error) {
