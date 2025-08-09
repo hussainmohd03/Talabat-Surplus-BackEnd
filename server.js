@@ -32,13 +32,13 @@ app.get('/', (req, res) => {
 const orderRouter = require('./routes/orderRouter')
 const foodRouter = require('./routes/foodRoutes')
 const reviewRouter = require('./routes/reviewRouter')
-const authRt = require('./routes/Auth')
+const UserRt = require('./routes/User')
 
 // use routers
 app.use('/orders', orderRouter)
 app.use('/foods', foodRouter)
 app.use('/reviews', reviewRouter)
-app.use('/auth', authRt)
+app.use('/auth', UserRt)
 
 // listener
 app.listen(port, () => {

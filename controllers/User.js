@@ -35,7 +35,7 @@ exports.Register = async (req, res) => {
     const newUser = await Model.create(data)
     res.status(200).send(newUser)
   } catch (error) {
-    res.status(500).send(error.message)
+    throw error
   }
 }
 
@@ -62,7 +62,7 @@ exports.Login = async (req, res) => {
 
     res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
   } catch (error) {
-    res.status(500).send(error.message)
+    throw error
   }
 }
 
@@ -100,6 +100,7 @@ exports.UpdatePassword = async (req, res) => {
 
     res.status(401).send({ status: 'Error', msg: 'Update password failed' })
   } catch (error) {
-    res.status(500).send(error.message)
+    throw error
   }
 }
+

@@ -4,7 +4,7 @@ const Food = require('../models/Food')
 // tested w insomnia works ig
 const getOrdersByUserId = async (req, res) => {
   try {
-    const orders = await Order.find({ customer_id: req.query.id })
+    const orders = await Order.find({ customer_id: res.locals.payload.id })
     res.send(orders)
   } catch (error) {
     console.log('error in getting orders by user id', error)
@@ -24,6 +24,7 @@ const getOrder = async (req, res) => {
 // should also work
 const placeOrder = async (req, res) => {
   try {
+    req.body.customer_id = res.locals.payload.id
     const order = await Order.create({ ...req.body })
     res.send(order)
   } catch (error) {
@@ -64,8 +65,8 @@ const updateOrder = async (req, res) => {
         req.params.id,
         {
           total_price: 0,
-          food_id: [],
-          restaurant_id: []
+          food_id: []
+          // restaurant_id: []
         },
         {
           new: true
@@ -84,8 +85,8 @@ const updateOrder = async (req, res) => {
         req.params.id,
         {
           $pull: {
-            food_id: req.query.foodId,
-            restaurant_id: currentCart.restaurant_id
+            food_id: req.query.foodId
+            // restaurant_id: currentCart.restaurant_id 
           },
           // looked $set up
           // will continue to do this even if it goes to negatives
@@ -109,8 +110,8 @@ const updateOrder = async (req, res) => {
         req.params.id,
         {
           $push: {
-            food_id: req.query.foodId,
-            restaurant_id: currentCart.restaurant_id
+            food_id: req.query.foodId
+            // restaurant_id: currentCart.restaurant_id
           },
           // looked $set up
           $set: {
