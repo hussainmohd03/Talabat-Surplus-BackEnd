@@ -3,6 +3,7 @@ const Food = require('../models/Food')
 // post food item
 const postFood = async (req, res) => {
   try {
+    req.body.restaurant_id = res.locals.payload.id
     const food = await Food.create({ ...req.body })
     res.status(200).send(food)
   } catch (error) {
@@ -38,6 +39,7 @@ const getFood = async (req, res) => {
 // updating
 const updateFood = async (req, res) => {
   try {
+    // make sure only the user who own this is the only one allowed to update it
     const food = await Food.findByIdAndUpdate(req.params.id, req.body, {
       new: true
     })
@@ -50,6 +52,8 @@ const updateFood = async (req, res) => {
 // delete
 const deleteFood = async (req, res) => {
   try {
+    // make sure only the user who own this is the only one allowed to delete it
+
     await Food.deleteOne({
       _id: req.params.id
     })

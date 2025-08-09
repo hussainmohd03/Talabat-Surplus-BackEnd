@@ -1,14 +1,14 @@
 const router = require('express').Router()
-const AuthCtrl = require('../controllers/Auth')
+const UserCtrl = require('../controllers/User')
 const middleWares = require('../middlewares')
 
-router.post('/login', AuthCtrl.Login)
-router.post('/register', AuthCtrl.Register)
+router.post('/login', UserCtrl.Login)
+router.post('/register', UserCtrl.Register)
 router.put(
-  '/update/:id',
+  '/update',
   middleWares.stripToken,
   middleWares.verifyToken,
-  AuthCtrl.UpdatePassword
+  UserCtrl.UpdatePassword
 )
 
 router.put(
