@@ -16,6 +16,12 @@ router.get(
   middleWares.verifyToken,
   UserCtrl.getProfileById
 )
+router.put(
+  '/profile',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  UserCtrl.updateProfile
+)
 router.delete(
   '',
   middleWares.stripToken,

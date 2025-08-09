@@ -138,3 +138,21 @@ exports.deleteProfile = async (req, res) => {
     throw error
   }
 }
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { role, id } = res.locals.payload
+    const Model = getModel(role)
+
+    const updatedProfile = await Model.findByIdAndUpdate(id, req.body, {
+      new: true
+    })
+
+    if (!updatedProfile)
+      return res.status(404).send({ msg: `${role} not found` })
+
+    res.status(200).send(updatedProfile)
+  } catch (error) {
+    throw error
+  }
+}
