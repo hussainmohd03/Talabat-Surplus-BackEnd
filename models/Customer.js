@@ -27,7 +27,9 @@ const customerSchema = new mongoose.Schema(
     },
     avatar_url: {
       type: String
-    }
+    },
+    failedLoginAttempts: { type: Number, default: 0 },
+    lockUntil: { type: Date }
   },
   {
     timestamps: true // createdAt & updatedAt

@@ -51,16 +51,35 @@ exports.Login = async (req, res) => {
       return res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
     }
 
+    // Check if account is locked
+    if (userInDB.lockUntil && userInDB.lockUntil > Date.now()) {
+      return res.status(423).send({
+        status: 'Error',
+        msg: 'Account temporarily locked due to too many failed attempts. Try again later.'
+      })
+    }
+
     const matched = await middleWares.comparePassword(
       req.body.password,
       userInDB.password_digest
     )
 
     if (matched) {
+      // Reset failed login attempts on success
+      userInDB.failedLoginAttempts = 0
+      userInDB.lockUntil = undefined
+      await userInDB.save()
+
       let payload = { id: userInDB._id, email: userInDB.email, role }
       let token = middleWares.createToken(payload)
       return res.status(200).send({ user: payload, token })
     }
+
+    userInDB.failedLoginAttempts += 1
+
+    if (userInDB.failedLoginAttempts >= 5)
+      // lock account for 10 minutes
+      userInDB.lockUntil = Date.now() + 10 * 60 * 1000
 
     res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
   } catch (error) {
