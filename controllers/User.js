@@ -77,6 +77,12 @@ exports.UpdatePassword = async (req, res) => {
       return res.status(404).send({ status: 'Error', msg: 'User not found' })
     }
 
+    if (!req.body.old_password || !req.body.new_password) {
+      return res
+        .status(400)
+        .send({ status: 'Error', msg: 'Old and new passwords are required' })
+    }
+    
     const matched = await middleWares.comparePassword(
       req.body.old_password,
       userInDB.password_digest
