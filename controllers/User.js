@@ -130,7 +130,10 @@ exports.deleteProfile = async (req, res) => {
     const Model = getModel(role)
 
     const deleted = await Model.findByIdAndDelete(id)
-    return res.status(404).send({ msg: `${role} not found`, deleted })
+    if (deleted)
+      return res.status(404).send({ msg: `${role} profile deleted`, deleted })
+
+    return res.status(404).send({ msg: `${role} not found` })
   } catch (error) {
     throw error
   }
