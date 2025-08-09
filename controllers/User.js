@@ -68,8 +68,8 @@ exports.Login = async (req, res) => {
 
 exports.UpdatePassword = async (req, res) => {
   try {
-    const { role } = req.query
-    const { id } = req.params
+    const { role } = res.locals.payload
+    const { id } = res.locals.payload
     const Model = getModel(role)
 
     let userInDB = await Model.findById(id)
@@ -103,4 +103,3 @@ exports.UpdatePassword = async (req, res) => {
     throw error
   }
 }
-
