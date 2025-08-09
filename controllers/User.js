@@ -131,7 +131,7 @@ exports.deleteProfile = async (req, res) => {
 
     const deleted = await Model.findByIdAndDelete(id)
     if (deleted)
-      return res.status(404).send({ msg: `${role} profile deleted`, deleted })
+      return res.status(200).send({ msg: `${role} profile deleted`, deleted })
 
     return res.status(404).send({ msg: `${role} not found` })
   } catch (error) {
@@ -151,7 +151,7 @@ exports.updateProfile = async (req, res) => {
     if (!updatedProfile)
       return res.status(404).send({ msg: `${role} not found` })
 
-    res.status(200).send(updatedProfile)
+    res.status(200).send({ msg: `${role} profile updated` })
   } catch (error) {
     throw error
   }
