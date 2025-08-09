@@ -11,6 +11,12 @@ router.put(
   UserCtrl.UpdatePassword
 )
 router.get(
+  '/profile',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  UserCtrl.getProfileById
+)
+router.get(
   '/session',
   middleWares.stripToken,
   middleWares.verifyToken,

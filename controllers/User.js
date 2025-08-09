@@ -82,7 +82,7 @@ exports.UpdatePassword = async (req, res) => {
         .status(400)
         .send({ status: 'Error', msg: 'Old and new passwords are required' })
     }
-    
+
     const matched = await middleWares.comparePassword(
       req.body.old_password,
       userInDB.password_digest
@@ -105,6 +105,20 @@ exports.UpdatePassword = async (req, res) => {
     }
 
     res.status(401).send({ status: 'Error', msg: 'Update password failed' })
+  } catch (error) {
+    throw error
+  }
+}
+
+exports.getProfileById = async (req, res) => {
+  try {
+    const { role, id } = res.locals.payload
+    const Model = getModel(role)
+
+    const profile = await Model.findById(id)
+    if (!profile) return res.status(404).send({ msg: `${role} not found` })
+
+    res.status(200).send(profile)
   } catch (error) {
     throw error
   }
