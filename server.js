@@ -37,6 +37,7 @@ const reviewRouter = require('./routes/reviewRouter')
 // const checkSession = require('./routes/session')
 const authRt = require('./routes/Auth')
 
+
 // use routers
 app.use('/orders', orderRouter)
 app.use('/foods', foodRouter)
@@ -45,8 +46,6 @@ app.use('/reviews', reviewRouter)
 // app.use('/restaurants', RestaurantRT)
 // app.use('/session', checkSession)
 app.use('/auth', authRt)
-
-
 
 // listener
 app.listen(port, () => {

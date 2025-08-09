@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 
-
 const reviewsSchema = new mongoose.Schema(
   {
     restaurant_comment: {
