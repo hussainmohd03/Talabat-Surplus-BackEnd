@@ -10,7 +10,6 @@ router.put(
   middleWares.verifyToken,
   UserCtrl.UpdatePassword
 )
-
 router.get(
   '/session',
   middleWares.stripToken,
