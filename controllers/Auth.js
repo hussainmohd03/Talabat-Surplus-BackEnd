@@ -25,6 +25,7 @@ exports.Register = async (req, res) => {
       data.first_name = req.body.first_name
       data.last_name = req.body.last_name
       data.address = req.body.address
+      data.avatar_url = req.body.avatar_url
     } else if (role === 'restaurant') {
       data.rest_name = req.body.name
       data.rest_tel = req.body.rest_tel
@@ -55,8 +56,8 @@ exports.Login = async (req, res) => {
     )
 
     if (matched) {
-      const payload = { id: userInDB._id, email: userInDB.email, role }
-      const token = middleWares.createToken(payload)
+      let payload = { id: userInDB._id, email: userInDB.email, role }
+      let token = middleWares.createToken(payload)
       return res.status(200).send({ user: payload, token })
     }
 
@@ -102,4 +103,33 @@ exports.UpdatePassword = async (req, res) => {
   } catch (error) {
     res.status(500).send(error.message)
   }
+}
+
+exports.UpdateAccount = async (req, res) => {
+  try {
+    const { role } = req.query
+    const { action } = req.query
+    const { id } = req.params
+    const Model = getModel(role)
+
+    let userInDB = await Model.findById(id)
+
+    if (!userInDB) {
+      return res.status(404).send({ status: 'Error', msg: 'User not found' })
+    } else if(req.user.id === id){
+      if (req.query.action === 'avatar_url') {
+        userInDB = await Model.findByIdAndUpdate(
+          id,
+          { ...req.body },
+          { new: true }
+        )
+
+        const payload = { id: userInDB._id, email: userInDB.email, role }
+
+        return res
+          .status(200)
+          .send({ status: 'profile img updated successfully', user: payload })
+      }
+    }
+  } catch (error) {}
 }

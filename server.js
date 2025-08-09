@@ -34,7 +34,6 @@ const foodRouter = require('./routes/foodRoutes')
 const reviewRouter = require('./routes/reviewRouter')
 const authRt = require('./routes/Auth')
 
-
 // use routers
 app.use('/orders', orderRouter)
 app.use('/foods', foodRouter)

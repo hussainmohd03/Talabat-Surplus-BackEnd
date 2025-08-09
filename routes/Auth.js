@@ -10,6 +10,14 @@ router.put(
   middleWares.verifyToken,
   AuthCtrl.UpdatePassword
 )
+
+router.put(
+  '/:id',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  AuthCtrl.UpdateAccount
+)
+
 router.get(
   '/session',
   middleWares.stripToken,
