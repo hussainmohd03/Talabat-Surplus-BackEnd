@@ -70,7 +70,12 @@ exports.Login = async (req, res) => {
       userInDB.lockUntil = undefined
       await userInDB.save()
 
-      let payload = { id: userInDB._id, email: userInDB.email, role }
+      let payload = {
+        id: userInDB._id,
+        email: userInDB.email,
+        role,
+        name: userInDB.first_name
+      }
       let token = middleWares.createToken(payload)
       return res.status(200).send({ user: payload, token })
     }
@@ -120,7 +125,12 @@ exports.UpdatePassword = async (req, res) => {
         { new: true }
       )
 
-      const payload = { id: userInDB._id, email: userInDB.email, role }
+      const payload = {
+        id: userInDB._id,
+        email: userInDB.email,
+        role,
+        name: userInDB.first_name
+      }
       return res
         .status(200)
         .send({ status: 'password updated successfully', user: payload })
