@@ -39,11 +39,14 @@ const getFood = async (req, res) => {
 // updating
 const updateFood = async (req, res) => {
   try {
-    // make sure only the user who own this is the only one allowed to update it
-    const food = await Food.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
-    })
-    res.status(200).send(food)
+    const food = await Food.findById(req.params.id)
+    const { id } = res.locals.payload
+    if (food.restaurant_id.toString() === id) {
+      const foods = await Food.findByIdAndUpdate(req.params.id, req.body, {
+        new: true
+      })
+      res.status(200).send(foods)
+    }
   } catch (error) {
     throw error
   }
@@ -52,16 +55,18 @@ const updateFood = async (req, res) => {
 // delete
 const deleteFood = async (req, res) => {
   try {
-    // make sure only the user who own this is the only one allowed to delete it
-
-    await Food.deleteOne({
-      _id: req.params.id
-    })
-    res.status(200).send({
-      msg: 'food item deleted',
-      payload: req.params.id,
-      status: 'Ok'
-    })
+    const food = await Food.findById(req.params.id)
+    const { id } = res.locals.payload
+    if (food.restaurant_id.toString() === id) {
+      await Food.deleteOne({
+        _id: req.params.id
+      })
+      res.status(200).send({
+        msg: 'food item deleted',
+        payload: req.params.id,
+        status: 'Ok'
+      })
+    }
   } catch (error) {
     throw error
   }
