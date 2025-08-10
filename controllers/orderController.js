@@ -25,7 +25,7 @@ const getOrder = async (req, res) => {
 const placeOrder = async (req, res) => {
   try {
     req.body.customer_id = res.locals.payload.id
-    const order = await Order.create({ ...req.body })
+    const order =  await Order.create({ ...req.body })
     res.send(order)
   } catch (error) {
     console.log('error in placing order', error)
