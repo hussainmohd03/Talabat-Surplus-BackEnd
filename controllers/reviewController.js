@@ -1,5 +1,5 @@
 const Review = require('../models/Review')
-
+const Order = require('../models/Order')
 // get a review
 const getReview = async (req, res) => {
   try {
@@ -19,16 +19,26 @@ const getAllReviews = async (req, res) => {
 }
 
 // post a review
+// can only post a review after order status changes to approved
+// if many orders then allow more than 1 post form
 const postReview = async (req, res) => {
   try {
-    const review = await Review.create({ ...req.body })
-    res.send(review)
+    const { id } = res.locals.payload
+    const orders = await Order.find({ customer_id: id })
+    // console.log()
+    if (orders.forEach((order) => order.order_status === 'approved')) {
+      const review = await Review.create({ ...req.body })
+      res.send(review)
+    } else {
+      res.send('you havent placed an order yet')
+    }
   } catch (error) {
     console.log('error in posting review', error)
   }
 }
 
 // update review
+// only mutable by whoever made the review
 const updateReview = async (req, res) => {
   try {
     const updatedReview = await Review.findByIdAndUpdate(
@@ -45,6 +55,8 @@ const updateReview = async (req, res) => {
 }
 
 // delete review
+// can only delete my reveiw
+
 const deleteReview = async (req, res) => {
   try {
     await Review.deleteOne({ _id: req.params.id })

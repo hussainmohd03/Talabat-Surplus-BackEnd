@@ -4,11 +4,11 @@ const orderSchema = new mongoose.Schema(
   {
     payment_status: {
       type: String,
-      enum: ['pending', 'approved']
+      enum: ['pending', 'approved', 'cancelled']
     },
     order_status: {
       type: String,
-      enum: ['pending', 'approved']
+      enum: ['pending', 'approved', 'cancelled']
     },
     food_id: [
       {
@@ -18,7 +18,8 @@ const orderSchema = new mongoose.Schema(
     ],
     total_price: {
       type: Number,
-      required: true
+      required: true,
+      min: 0
     },
     customer_id: {
       type: mongoose.Schema.Types.ObjectId,
