@@ -19,19 +19,20 @@ const getAllReviews = async (req, res) => {
 }
 
 // post a review
-// can only post a review after order status changes to approved
-// if many orders then allow more than 1 post form
+// should work 
 const postReview = async (req, res) => {
   try {
     const { id } = res.locals.payload
     const orders = await Order.find({ customer_id: id })
-    // console.log()
-    if (orders.forEach((order) => order.order_status === 'approved')) {
-      const review = await Review.create({ ...req.body })
-      res.send(review)
-    } else {
-      res.send('you havent placed an order yet')
-    }
+
+    orders.forEach(async (order) => {
+      if (order.order_status === 'approved') {
+        const review = await Review.create({ ...req.body })
+        return res.send(review)
+      } else {
+        res.send('you havent placed an order yet')
+      }
+    })
   } catch (error) {
     console.log('error in posting review', error)
   }
