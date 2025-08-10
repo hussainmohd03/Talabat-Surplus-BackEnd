@@ -6,7 +6,7 @@ router.get(
   '',
   middleWares.stripToken,
   middleWares.verifyToken,
-  controller.getAllReviews
+  controller.getAllReviewsByRestaurant
 )
 router.get(
   '/:id',

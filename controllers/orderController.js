@@ -118,7 +118,6 @@ const updateOrder = async (req, res) => {
             food_id: req.query.foodId
             // restaurant_id: currentCart.restaurant_id
           },
-          // looked $set up
           $set: {
             total_price: currentCart.total_price + parseInt(itemId.price)
           }

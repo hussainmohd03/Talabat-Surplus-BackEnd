@@ -29,7 +29,7 @@ const getAllFood = async (req, res) => {
 // get food  item
 const getFood = async (req, res) => {
   try {
-    const food = await Food.findById(req.params.id)
+    const food = await Food.findById(req.params.id).populate('restaurant_id')
     res.send(food)
   } catch (error) {
     console.log(error)

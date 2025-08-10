@@ -20,7 +20,7 @@ const foodSchema = new mongoose.Schema(
       type: Number
     },
 
-    quality: {
+    quantity: {
       type: Number
     },
     restaurant_id: {

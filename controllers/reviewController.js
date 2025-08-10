@@ -9,7 +9,7 @@ const getReview = async (req, res) => {
 }
 
 // get all reviews
-const getAllReviews = async (req, res) => {
+const getAllReviewsByRestaurant = async (req, res) => {
   try {
     const reviews = await Review.find({})
     res.send(reviews)
@@ -78,7 +78,7 @@ const deleteReview = async (req, res) => {
 }
 module.exports = {
   getReview,
-  getAllReviews,
+  getAllReviewsByRestaurant,
   postReview,
   updateReview,
   deleteReview
