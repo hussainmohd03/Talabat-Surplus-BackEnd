@@ -19,19 +19,20 @@ const getAllReviews = async (req, res) => {
 }
 
 // post a review
-// can only post a review after order status changes to approved
-// if many orders then allow more than 1 post form
+// should work
 const postReview = async (req, res) => {
   try {
     const { id } = res.locals.payload
     const orders = await Order.find({ customer_id: id })
-    // console.log()
-    if (orders.forEach((order) => order.order_status === 'approved')) {
-      const review = await Review.create({ ...req.body })
-      res.send(review)
-    } else {
-      res.send('you havent placed an order yet')
-    }
+
+    orders.forEach(async (order) => {
+      if (order.order_status === 'approved') {
+        const review = await Review.create({ ...req.body })
+        return res.send(review)
+      } else {
+        res.send('you havent placed an order yet')
+      }
+    })
   } catch (error) {
     console.log('error in posting review', error)
   }
@@ -41,14 +42,19 @@ const postReview = async (req, res) => {
 // only mutable by whoever made the review
 const updateReview = async (req, res) => {
   try {
-    const updatedReview = await Review.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true
-      }
-    )
-    res.send(updatedReview)
+    const { id } = res.locals.payload
+    const review = await Review.findById(req.params.id)
+    const order = await Order.findById(review.order_id)
+    if (order.customer_id.toString() === id) {
+      const updatedReview = await Review.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+          new: true
+        }
+      )
+      res.send(updatedReview)
+    }
   } catch (error) {
     console.log('error in updating review', error)
   }
@@ -59,8 +65,13 @@ const updateReview = async (req, res) => {
 
 const deleteReview = async (req, res) => {
   try {
-    await Review.deleteOne({ _id: req.params.id })
-    res.status(200).send({ msg: 'review deleted' })
+    const { id } = res.locals.payload
+    const review = await Review.findById(req.params.id)
+    const order = await Order.findById(review.order_id)
+    if (order.customer_id.toString() === id) {
+      await Review.deleteOne({ _id: req.params.id })
+      res.status(200).send({ msg: 'review deleted' })
+    }
   } catch (error) {
     console.log('error in deleting review', error)
   }
