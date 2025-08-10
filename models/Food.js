@@ -19,6 +19,10 @@ const foodSchema = new mongoose.Schema(
     original_price: {
       type: Number
     },
+
+    quality: {
+      type: Number
+    },
     restaurant_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Restaurant',

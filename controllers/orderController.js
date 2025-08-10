@@ -80,7 +80,9 @@ const updateOrder = async (req, res) => {
 
     if (req.query.action === 'remove' && req.query.status === 'pending') {
       const itemId = await Food.findById(req.query.foodId)
+      console.log(itemId)
       const currentCart = await Order.findById(req.params.id)
+      console.log(currentCart)
       const updatedOrder = await Order.findByIdAndUpdate(
         req.params.id,
         {
@@ -91,7 +93,10 @@ const updateOrder = async (req, res) => {
           // looked $set up
           // will continue to do this even if it goes to negatives
           $set: {
-            total_price: currentCart.total_price - parseInt(itemId.price)
+            total_price: Math.max(
+              0,
+              currentCart.total_price - parseInt(itemId.price)
+            )
           }
         },
         {
