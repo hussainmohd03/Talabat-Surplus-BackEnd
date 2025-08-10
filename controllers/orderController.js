@@ -86,7 +86,7 @@ const updateOrder = async (req, res) => {
         {
           $pull: {
             food_id: req.query.foodId
-            // restaurant_id: currentCart.restaurant_id 
+            // restaurant_id: currentCart.restaurant_id
           },
           // looked $set up
           // will continue to do this even if it goes to negatives

@@ -96,13 +96,13 @@ exports.UpdatePassword = async (req, res) => {
 
     let userInDB = await Model.findById(id)
     if (!userInDB) {
-      return res.status(404).send({ status: 'Error', msg: 'User not found' })
+      return res.status(404).send({ status: 'error', msg: 'user not found' })
     }
 
     if (!req.body.old_password || !req.body.new_password) {
       return res
         .status(400)
-        .send({ status: 'Error', msg: 'Old and new passwords are required' })
+        .send({ status: 'error', msg: 'old and new passwords are required' })
     }
 
     const matched = await middleWares.comparePassword(
@@ -123,10 +123,10 @@ exports.UpdatePassword = async (req, res) => {
       const payload = { id: userInDB._id, email: userInDB.email, role }
       return res
         .status(200)
-        .send({ status: 'Password updated successfully', user: payload })
+        .send({ status: 'password updated successfully', user: payload })
     }
 
-    res.status(401).send({ status: 'Error', msg: 'Update password failed' })
+    res.status(401).send({ status: 'error', msg: 'update password failed' })
   } catch (error) {
     throw error
   }
