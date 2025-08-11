@@ -9,7 +9,12 @@ router.post(
   middleWares.verifyToken,
   controller.postFood
 )
-router.get('/', controller.getAllFood)
+router.get(
+  '/',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  controller.getAllFood
+)
 router.get('/:id', controller.getFood)
 router.put(
   '/:id',
@@ -23,6 +28,5 @@ router.delete(
   middleWares.verifyToken,
   controller.deleteFood
 )
-
 
 module.exports = router

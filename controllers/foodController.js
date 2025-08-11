@@ -18,7 +18,7 @@ const getAllFood = async (req, res) => {
       const foodList = await Food.find({ cuisine: req.query.cuisine })
       res.send(foodList)
     } else {
-      const foods = await Food.find({})
+      const foods = await Food.find({ restaurant_id: res.locals.payload.id })
       res.status(200).send(foods)
     }
   } catch (error) {
