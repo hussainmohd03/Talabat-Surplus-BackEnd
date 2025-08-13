@@ -1,13 +1,46 @@
 const Order = require('../models/Order')
 const Food = require('../models/Food')
-
+const User = require('../models/Customer')
 // tested w insomnia works ig
-const getOrdersByUserId = async (req, res) => {
+const getOrderByUserId = async (req, res) => {
   try {
-    const orders = await Order.find({
-      customer_id: res.locals.payload.id
+    const order = await Order.findOne({
+      customer_id: res.locals.payload.id,
+      order_status: 'pending',
+      payment_status: 'pending'
     }).populate('foodItems.foodId')
-    res.send(orders)
+    res.send(order)
+    console.log(order)
+  } catch (error) {
+    console.log('error in getting orders by user id', error)
+  }
+}
+
+const getApprovedOrders = async (req, res) => {
+  try {
+    console.log('id', res.locals.payload.id)
+    if (res.locals.payload.role === 'customer') {
+      const user = await User.findById(req.params.id)
+      const orders = await Order.find({
+        customer_id: res.locals.payload.id,
+        order_status: 'pending',
+        payment_status: 'approved'
+      }).populate('food_id')
+      res.send(orders)
+    }
+    if (res.locals.payload.role === 'restaurant') {
+      const foods = await Food.find({
+        restaurant_id: res.locals.payload.id
+      })
+      console.log('foods', foods)
+      const foodsId = foods.map((food) => food._id)
+      console.log(foodsId)
+      const orders = await Order.find({
+        payment_status: 'approved',
+        food_id: { $in: foodsId }
+      })
+      res.send(orders)
+    }
   } catch (error) {
     console.log('error in getting orders by user id', error)
   }
@@ -16,8 +49,8 @@ const getOrdersByUserId = async (req, res) => {
 // tested w insomnia works ig
 const getOrder = async (req, res) => {
   try {
-    const orders = await Order.findById(req.params.id)
-    res.send(orders)
+    const order = await Order.findById(req.params.id)
+    res.send(order)
   } catch (error) {
     console.log('error in getting order', error)
   }
@@ -41,7 +74,7 @@ const updateOrder = async (req, res) => {
       if (req.query.status === 'approved') {
         const approvedOrder = await Order.findByIdAndUpdate(
           req.params.id,
-          req.body,
+          { order_status: 'approved' },
           {
             new: true
           }
@@ -49,17 +82,16 @@ const updateOrder = async (req, res) => {
         res.send(approvedOrder)
       }
       // nothing to delete here since cancelled means nothing to the backend, just clears cart in the front end
-    } else if (req.query.status === 'cancelled') {
+    } if (req.query.status === 'cancelled') {
       const cancelledOrder = await Order.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        { order_status: 'cancelled' },
         {
           new: true
         }
       )
       res.send(cancelledOrder)
     }
-
     // clearing cart of all order items
     // should only execute if action is clear and status whether that's payment or the order itself is still pending
     if (req.query.action === 'clear' && req.query.status === 'pending') {
@@ -76,10 +108,8 @@ const updateOrder = async (req, res) => {
       )
       res.send(clearedOrder)
     }
-
     // remove a singular food item from the array of food_id where it matches with the query param foodId (only if status is pending)
     // update price, food details, and restaurant details accordingly
-
     if (req.query.action === 'remove' && req.query.status === 'pending') {
       const foodItem = await Food.findById(req.query.foodId)
       const currentCart = await Order.findById(req.params.id)
@@ -102,7 +132,7 @@ const updateOrder = async (req, res) => {
     }
 
     // append da order cart w new items
-    if (req.query.action === 'add' && req.query.status === 'pending') {
+if (req.query.action === 'add' && req.query.status === 'pending') {
       const foodItem = await Food.findById(req.query.foodId)
       const currentCart = await Order.findById(req.params.id).populate(
         'foodItems.foodId'
@@ -132,4 +162,23 @@ const updateOrder = async (req, res) => {
   }
 }
 
-module.exports = { getOrder, getOrdersByUserId, placeOrder, updateOrder }
+// const resApprovedOrders = async (req, res) => {
+//   try {
+//     if (req.query.action === 'approve' && req.query.status === 'pending') {
+//       const order = await Order.findByIdAndUpdate(
+//         req.params.id,
+//         { order_status: 'approved' },
+//         { new: true }
+//       ).populate('food_id')
+//       res.send(order)
+//     }
+//   } catch (error) {}
+// }
+
+module.exports = {
+  getOrder,
+  getOrderByUserId,
+  placeOrder,
+  updateOrder,
+  getApprovedOrders
+}
