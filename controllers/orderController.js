@@ -81,32 +81,24 @@ const updateOrder = async (req, res) => {
     // update price, food details, and restaurant details accordingly
 
     if (req.query.action === 'remove' && req.query.status === 'pending') {
-      const itemId = await Food.findById(req.query.foodId)
-      console.log(itemId)
+      const foodItem = await Food.findById(req.query.foodId)
       const currentCart = await Order.findById(req.params.id)
-      console.log(currentCart)
-      const updatedOrder = await Order.findByIdAndUpdate(
-        req.params.id,
-        {
-          $pull: {
-            food_id: req.query.foodId
-            // restaurant_id: currentCart.restaurant_id
-          },
-          // looked $set up
-          // will continue to do this even if it goes to negatives
-          $set: {
-            total_price: Math.max(
-              0,
-              currentCart.total_price - parseInt(itemId.price)
-            )
-          }
-        },
-        {
-          new: true
-        }
+      const itemInCart = currentCart.foodItems.find(
+        (item) => item.foodId.toString() === req.query.foodId
       )
-      console.log(updatedOrder)
-      res.send(updatedOrder)
+
+      if (itemInCart) {
+        if (itemInCart.quantity > 1) {
+          itemInCart.quantity -= 1
+        } else {
+          let index = currentCart.foodItems.indexOf(itemInCart)
+          currentCart.foodItems.splice(index, 1)
+        }
+        currentCart.total_price -= parseFloat(foodItem.price)
+        const updated = await currentCart.save()
+
+        res.send(updated)
+      }
     }
 
     // append da order cart w new items
