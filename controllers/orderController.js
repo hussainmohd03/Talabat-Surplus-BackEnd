@@ -164,7 +164,6 @@ const updateOrder = async (req, res) => {
         })
         updatedOrder = await currentCart.save()
       }
-
       res.send(updatedOrder)
     }
   } catch (error) {
