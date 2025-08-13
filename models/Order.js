@@ -10,10 +10,17 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: ['pending', 'approved', 'cancelled']
     },
-    food_id: [
+    foodItems: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Food'
+        foodId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Food'
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+          min: 1
+        }
       }
     ],
     total_price: {
