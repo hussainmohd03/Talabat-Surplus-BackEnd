@@ -156,6 +156,17 @@ exports.getProfileById = async (req, res) => {
   }
 }
 
+exports.getResById = async (req, res) => {
+  try {
+    // const { id } = req.params.id
+    const Model = getModel('restaurant')
+    const profile = await Model.findById(req.params.id)
+    // console.log('id', id)
+    console.log('profile', profile)
+    res.send(profile)
+  } catch (error) {}
+}
+
 exports.deleteProfile = async (req, res) => {
   try {
     const { role, id } = res.locals.payload

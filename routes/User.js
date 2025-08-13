@@ -27,7 +27,12 @@ router.put(
   middleWares.verifyToken,
   UserCtrl.updateProfile
 )
-
+router.get(
+  '/profile/:id',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  UserCtrl.getResById
+)
 router.get(
   '/profile',
   middleWares.stripToken,
