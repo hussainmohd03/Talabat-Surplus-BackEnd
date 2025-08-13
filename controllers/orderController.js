@@ -19,26 +19,28 @@ const getOrderByUserId = async (req, res) => {
 const getApprovedOrders = async (req, res) => {
   try {
     console.log('id', res.locals.payload.id)
+
     if (res.locals.payload.role === 'customer') {
       const user = await User.findById(req.params.id)
       const orders = await Order.find({
         customer_id: res.locals.payload.id,
         order_status: 'pending',
         payment_status: 'approved'
-      }).populate('food_id')
+      }).populate('foodItems.foodId')
       res.send(orders)
     }
     if (res.locals.payload.role === 'restaurant') {
       const foods = await Food.find({
         restaurant_id: res.locals.payload.id
       })
-      console.log('foods', foods)
       const foodsId = foods.map((food) => food._id)
-      console.log(foodsId)
+      const chosenFood = foodsId.toString()
+      console.log(chosenFood)
       const orders = await Order.find({
-        payment_status: 'approved',
-        food_id: { $in: foodsId }
-      })
+        payment_status: 'approved'
+      }).populate('foodItems.foodId')
+      console.log('orders', orders)
+
       res.send(orders)
     }
   } catch (error) {
@@ -89,7 +91,8 @@ const updateOrder = async (req, res) => {
         res.send(approvedOrder)
       }
       // nothing to delete here since cancelled means nothing to the backend, just clears cart in the front end
-    } if (req.query.status === 'cancelled') {
+    }
+    if (req.query.status === 'cancelled') {
       const cancelledOrder = await Order.findByIdAndUpdate(
         req.params.id,
         { order_status: 'cancelled' },
@@ -139,7 +142,7 @@ const updateOrder = async (req, res) => {
     }
 
     // append da order cart w new items
-if (req.query.action === 'add' && req.query.status === 'pending') {
+    if (req.query.action === 'add' && req.query.status === 'pending') {
       const foodItem = await Food.findById(req.query.foodId)
       const currentCart = await Order.findById(req.params.id).populate(
         'foodItems.foodId'
@@ -174,5 +177,6 @@ module.exports = {
   getOrderByUserId,
   placeOrder,
   updateOrder,
-  changeStatus
+  changeStatus,
+  getApprovedOrders
 }
