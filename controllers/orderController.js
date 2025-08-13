@@ -4,7 +4,9 @@ const Food = require('../models/Food')
 // tested w insomnia works ig
 const getOrdersByUserId = async (req, res) => {
   try {
-    const orders = await Order.find({ customer_id: res.locals.payload.id })
+    const orders = await Order.find({
+      customer_id: res.locals.payload.id
+    }).populate('foodItems.foodId')
     res.send(orders)
   } catch (error) {
     console.log('error in getting orders by user id', error)
