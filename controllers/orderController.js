@@ -34,6 +34,13 @@ const placeOrder = async (req, res) => {
   }
 }
 
+const changeStatus = async (req, res) => {
+  const order = await Order.findByIdAndUpdate(req.params.id, req.body, {
+    new: true
+  })
+  res.status(200).send(order)
+}
+
 // hmmm
 const updateOrder = async (req, res) => {
   try {
@@ -132,4 +139,10 @@ const updateOrder = async (req, res) => {
   }
 }
 
-module.exports = { getOrder, getOrdersByUserId, placeOrder, updateOrder }
+module.exports = {
+  getOrder,
+  getOrdersByUserId,
+  placeOrder,
+  updateOrder,
+  changeStatus
+}
