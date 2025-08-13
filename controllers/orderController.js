@@ -25,7 +25,7 @@ const getOrder = async (req, res) => {
 const placeOrder = async (req, res) => {
   try {
     req.body.customer_id = res.locals.payload.id
-    const order =  await Order.create({ ...req.body })
+    const order = await Order.create({ ...req.body })
     res.send(order)
   } catch (error) {
     console.log('error in placing order', error)
@@ -109,24 +109,28 @@ const updateOrder = async (req, res) => {
 
     // append da order cart w new items
     if (req.query.action === 'add' && req.query.status === 'pending') {
-      const itemId = await Food.findById(req.query.foodId)
-      const currentCart = await Order.findById(req.params.id)
-      const updatedOrder = await Order.findByIdAndUpdate(
-        req.params.id,
-        {
-          $push: {
-            food_id: req.query.foodId
-            // restaurant_id: currentCart.restaurant_id
-          },
-          // looked $set up
-          $set: {
-            total_price: currentCart.total_price + parseInt(itemId.price)
-          }
-        },
-        {
-          new: true
-        }
+      const foodItem = await Food.findById(req.query.foodId)
+      const currentCart = await Order.findById(req.params.id).populate(
+        'foodItems.foodId'
       )
+      const itemInCart = currentCart.foodItems.find(
+        (item) => item.foodId._id == req.query.foodId
+      )
+
+      let updatedOrder
+
+      if (itemInCart) {
+        itemInCart.quantity += 1
+        currentCart.total_price += parseFloat(foodItem.price)
+        updatedOrder = await currentCart.save()
+      } else {
+        currentCart.foodItems.push({
+          foodId: req.query.foodId,
+          quantity: 1
+        })
+        updatedOrder = await currentCart.save()
+      }
+
       res.send(updatedOrder)
     }
   } catch (error) {
