@@ -34,6 +34,11 @@ router.put(
   middleWares.verifyToken,
   controller.updateOrder
 )
-
+router.put(
+  '/place/:id',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  controller.changeStatus
+)
 
 module.exports = router
