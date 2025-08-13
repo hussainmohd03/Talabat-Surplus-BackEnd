@@ -6,7 +6,7 @@ router.get(
   '',
   middleWares.stripToken,
   middleWares.verifyToken,
-  controller.getOrdersByUserId
+  controller.getOrderByUserId
 )
 router.get(
   '/:id',
@@ -14,6 +14,14 @@ router.get(
   middleWares.verifyToken,
   controller.getOrder
 )
+
+router.get(
+  '/approved/:id',
+  middleWares.stripToken,
+  middleWares.verifyToken,
+  controller.getApprovedOrders
+)
+
 router.post(
   '',
   middleWares.stripToken,
