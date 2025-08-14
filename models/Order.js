@@ -33,11 +33,6 @@ const orderSchema = new mongoose.Schema(
       ref: 'Customer',
       required: true
     }
-    // restaurant_id: [{
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Restaurant',
-    //   required: true
-    // }]
   },
   {
     timestamps: true // createdAt & updatedAt
