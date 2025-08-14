@@ -10,7 +10,6 @@ const getOrderByUserId = async (req, res) => {
       payment_status: 'pending'
     }).populate('foodItems.foodId')
     res.send(order)
-    console.log(order)
   } catch (error) {
     console.log('error in getting orders by user id', error)
   }
@@ -18,7 +17,6 @@ const getOrderByUserId = async (req, res) => {
 
 const getApprovedOrders = async (req, res) => {
   try {
-    console.log('id', res.locals.payload.id)
 
     if (res.locals.payload.role === 'customer') {
       const user = await User.findById(req.params.id)
@@ -35,11 +33,9 @@ const getApprovedOrders = async (req, res) => {
       })
       const foodsId = foods.map((food) => food._id)
       const chosenFood = foodsId.toString()
-      console.log(chosenFood)
       const orders = await Order.find({
         payment_status: 'approved'
       }).populate('foodItems.foodId')
-      console.log('orders', orders)
 
       res.send(orders)
     }
