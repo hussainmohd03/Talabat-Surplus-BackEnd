@@ -1,7 +1,7 @@
 const Order = require('../models/Order')
 const Food = require('../models/Food')
 const User = require('../models/Customer')
-// tested w insomnia works ig
+
 const getOrderByUserId = async (req, res) => {
   try {
     const order = await Order.findOne({
@@ -11,13 +11,12 @@ const getOrderByUserId = async (req, res) => {
     }).populate('foodItems.foodId')
     res.send(order)
   } catch (error) {
-    console.log('error in getting orders by user id', error)
+    throw error
   }
 }
 
 const getApprovedOrders = async (req, res) => {
   try {
-
     if (res.locals.payload.role === 'customer') {
       const user = await User.findById(req.params.id)
       const orders = await Order.find({
@@ -40,28 +39,26 @@ const getApprovedOrders = async (req, res) => {
       res.send(orders)
     }
   } catch (error) {
-    console.log('error in getting orders by user id', error)
+    throw error
   }
 }
 
-// tested w insomnia works ig
 const getOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id)
     res.send(order)
   } catch (error) {
-    console.log('error in getting order', error)
+    throw error
   }
 }
 
-// should also work
 const placeOrder = async (req, res) => {
   try {
     req.body.customer_id = res.locals.payload.id
     const order = await Order.create({ ...req.body })
     res.send(order)
   } catch (error) {
-    console.log('error in placing order', error)
+    throw error
   }
 }
 
@@ -72,7 +69,6 @@ const changeStatus = async (req, res) => {
   res.status(200).send(order)
 }
 
-// hmmm
 const updateOrder = async (req, res) => {
   try {
     if (req.query.action === 'status') {
@@ -86,7 +82,6 @@ const updateOrder = async (req, res) => {
         )
         res.send(approvedOrder)
       }
-      // nothing to delete here since cancelled means nothing to the backend, just clears cart in the front end
     }
     if (req.query.status === 'cancelled') {
       const cancelledOrder = await Order.findByIdAndUpdate(
@@ -98,15 +93,12 @@ const updateOrder = async (req, res) => {
       )
       res.send(cancelledOrder)
     }
-    // clearing cart of all order items
-    // should only execute if action is clear and status whether that's payment or the order itself is still pending
     if (req.query.action === 'clear' && req.query.status === 'pending') {
       const clearedOrder = await Order.findByIdAndUpdate(
         req.params.id,
         {
           total_price: 0,
           food_id: []
-          // restaurant_id: []
         },
         {
           new: true
@@ -114,8 +106,6 @@ const updateOrder = async (req, res) => {
       )
       res.send(clearedOrder)
     }
-    // remove a singular food item from the array of food_id where it matches with the query param foodId (only if status is pending)
-    // update price, food details, and restaurant details accordingly
     if (req.query.action === 'remove' && req.query.status === 'pending') {
       const foodItem = await Food.findById(req.query.foodId)
       const currentCart = await Order.findById(req.params.id)
@@ -137,7 +127,6 @@ const updateOrder = async (req, res) => {
       }
     }
 
-    // append da order cart w new items
     if (req.query.action === 'add' && req.query.status === 'pending') {
       const foodItem = await Food.findById(req.query.foodId)
       const currentCart = await Order.findById(req.params.id).populate(
@@ -163,7 +152,7 @@ const updateOrder = async (req, res) => {
       res.send(updatedOrder)
     }
   } catch (error) {
-    console.log(error)
+    throw error
   }
 }
 
