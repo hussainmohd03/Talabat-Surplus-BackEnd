@@ -2,7 +2,6 @@ const controller = require('../controllers/foodController')
 const router = require('express').Router()
 const middleWares = require('../middlewares')
 
-//get all food items
 router.post(
   '/',
   middleWares.stripToken,

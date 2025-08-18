@@ -14,12 +14,11 @@ const getAllReviews = async (req, res) => {
     const reviews = await Review.find({})
     res.send(reviews)
   } catch (error) {
-    console.log('error in fetching all reviews', error)
+    throw error
   }
 }
 
 // post a review
-// should work
 const postReview = async (req, res) => {
   try {
     const { id } = res.locals.payload
@@ -34,7 +33,7 @@ const postReview = async (req, res) => {
       }
     })
   } catch (error) {
-    console.log('error in posting review', error)
+    throw error
   }
 }
 
@@ -56,7 +55,7 @@ const updateReview = async (req, res) => {
       res.send(updatedReview)
     }
   } catch (error) {
-    console.log('error in updating review', error)
+    throw error
   }
 }
 
@@ -73,7 +72,7 @@ const deleteReview = async (req, res) => {
       res.status(200).send({ msg: 'review deleted' })
     }
   } catch (error) {
-    console.log('error in deleting review', error)
+    throw error
   }
 }
 module.exports = {

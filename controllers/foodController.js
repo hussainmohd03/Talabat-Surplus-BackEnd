@@ -32,12 +32,12 @@ const getFood = async (req, res) => {
     const food = await Food.findById(req.params.id).populate('restaurant_id')
     res.send(food)
   } catch (error) {
-    console.log(error)
+    throw error
   }
 }
 
 
-// updating
+// updating food item
 const updateFood = async (req, res) => {
   try {
     const food = await Food.findById(req.params.id)
@@ -53,7 +53,7 @@ const updateFood = async (req, res) => {
   }
 }
 
-// delete
+// delete food by id
 const deleteFood = async (req, res) => {
   try {
     const food = await Food.findById(req.params.id)
